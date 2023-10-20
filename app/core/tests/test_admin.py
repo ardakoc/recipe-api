@@ -34,7 +34,7 @@ class AdminSiteTests(TestCase):
         """
         # According to this page:
         # https://docs.djangoproject.com/en/4.2/ref/contrib/admin/#reversing-admin-urls
-        # the layout of the reverse url method of the list (changelist) page must be
+        # the pattern of the reverse url method of the list (changelist) page must be
         # {{ app_label }}_{{ model_name }}_changelist:
         url = reverse('admin:core_user_changelist')
         response = self.client.get(url)
@@ -48,7 +48,7 @@ class AdminSiteTests(TestCase):
         """
         # According to this page:
         # https://docs.djangoproject.com/en/4.2/ref/contrib/admin/#reversing-admin-urls
-        # the layout of the reverse url method of the edit page must be
+        # the pattern of the reverse url method of the edit page must be
         # {{ app_label }}_{{ model_name }}_change and the object_id parameter:
         url = reverse('admin:core_user_change', args=[self.user.id])
         response = self.client.get(url)
