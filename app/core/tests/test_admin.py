@@ -54,3 +54,16 @@ class AdminSiteTests(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
+
+    def test_create_user_page(self):
+        """
+        Test the create user page works.
+        """
+        # According to this page:
+        # https://docs.djangoproject.com/en/4.2/ref/contrib/admin/#reversing-admin-urls
+        # the pattern of the reverse url method of the add page must be
+        # {{ app_label }}_{{ model_name }}_add:
+        url = reverse('admin:core_user_add')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
