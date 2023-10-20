@@ -27,6 +27,20 @@ class UserAdmin(BaseUserAdmin):
         (_('Important dates'), {'fields': ('last_login',)}),
     )
     readonly_fields =['last_login']
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': (
+                'email',
+                'name',
+                'password1',
+                'password2',
+                'is_active',
+                'is_staff',
+                'is_superuser',
+            ),
+        }),
+    )
 
 
 admin.site.register(models.User, admin_class=UserAdmin)
