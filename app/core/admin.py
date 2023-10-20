@@ -14,7 +14,7 @@ class UserAdmin(BaseUserAdmin):
     """
     # Order the list by id:
     ordering = ['id']
-    # Fields that we want to disyplay in the list:
+    # Fields that we want to display in the list:
     list_display = ['email', 'name']
     # Divide the page into headings and set the fields for each heading
     # (Check the pattern of this attribute: django.contrib.auth.admin.UserAdmin):
@@ -27,6 +27,8 @@ class UserAdmin(BaseUserAdmin):
         (_('Important dates'), {'fields': ('last_login',)}),
     )
     readonly_fields =['last_login']
+    # Fields that we want to display in the add page
+    # (Check the pattern of this attribute: django.contrib.auth.admin.UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
