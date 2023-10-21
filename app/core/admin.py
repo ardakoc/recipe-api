@@ -26,7 +26,7 @@ class UserAdmin(BaseUserAdmin):
         }),
         (_('Important dates'), {'fields': ('last_login',)}),
     )
-    readonly_fields =['last_login']
+    readonly_fields = ['last_login']
     # Fields that we want to display in the add page
     # (Check the pattern of this attribute: django.contrib.auth.admin.UserAdmin):
     add_fieldsets = (
