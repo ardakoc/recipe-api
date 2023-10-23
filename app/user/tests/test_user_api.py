@@ -88,7 +88,7 @@ class PublicUserApiTests(TestCase):
         }
         create_user(**user_info)
 
-        payload = {'email': user_info['email'], 'password': user_info['password'],}
+        payload = {'email': user_info['email'], 'password': user_info['password'], }
         response = self.client.post(TOKEN_URL, payload)
 
         self.assertIn('token', response.data)
@@ -100,7 +100,7 @@ class PublicUserApiTests(TestCase):
         """
         create_user(email='test@example.com', password='goodpass')
 
-        payload = {'email': 'test@example.com', 'password': 'baddpass',}
+        payload = {'email': 'test@example.com', 'password': 'baddpass', }
         response = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', response.data)
@@ -110,7 +110,7 @@ class PublicUserApiTests(TestCase):
         """
         Test error returned if post a blank password.
         """
-        payload = {'email': 'test@example.com', 'password': '',}
+        payload = {'email': 'test@example.com', 'password': '', }
         response = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', response.data)
@@ -163,7 +163,7 @@ class PrivateUserApiTests(TestCase):
         """
         Test updating the user profile for the authenticated user.
         """
-        updated_user = {'name': 'Updated Name', 'password': 'newpassword123',}
+        updated_user = {'name': 'Updated Name', 'password': 'newpassword123', }
 
         response = self.client.patch(ME_URL, updated_user)
 
