@@ -63,3 +63,42 @@ class PrivateRecipeAPITests(TestCase):
             'testpass123',
         )
         self.client.force_authenticate(self.user)
+
+    def test_retrieve_recipes(self):
+        """
+        Test retrieving a list of recipes.
+        """
+        create_recipe(user=self.user)
+        create_recipe(user=self.user)
+
+        response = self.client.get(RECIPES_URL)
+
+        # Get all recipes with the reverse order by id. That means, we will return the
+        # list with newer recipes first:
+        recipes = Recipe.objects.all().order_by('-id')
+        # Serializers can either return a detail, which is just one item, or we can
+        # return a list of items. When we pass many=True, tells it that we want to pass
+        # in a list of items:
+        serializer = RecipeSerializer(recipes, many=True)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_recipe_list_limited_to_user(self):
+        """
+        Test list of recipes is limited to authenticated user.
+        """
+        other_user = get_user_model().objects.create_user(
+            'other@example.com',
+            'testpass123',
+        )
+        create_recipe(user=other_user)
+        create_recipe(user=self.user)
+
+        response = self.client.get(RECIPES_URL)
+
+        recipes = Recipe.objects.filter(user=self.user).order_by('-id')
+        serializer = RecipeSerializer(recipes, many=True)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
