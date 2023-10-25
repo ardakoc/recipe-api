@@ -141,7 +141,7 @@ class PrivateRecipeAPITests(TestCase):
 
         recipe = Recipe.objects.get(id=response.data['id'])
         
-        for k, v in new_user.items:
+        for k, v in new_user.items():
             # Get a named attribute from an object; getattr(recipe, k) is equivalent to
             # recipe.k. In this case recipe.k must be equal to v
             # (e.g. recipe.title = 'Sample recipe'):
