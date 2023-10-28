@@ -90,7 +90,7 @@ class PrivateTagsAPITests(TestCase):
         """
         Test updating a tag.
         """
-        tag = Tag.objects.create(user=self.user, name='Sample tag name')        
+        tag = Tag.objects.create(user=self.user, name='Sample tag name')
         payload = {'name': 'New name'}
         url = detail_url(tag.id)
         response = self.client.patch(url, payload)
@@ -113,3 +113,28 @@ class PrivateTagsAPITests(TestCase):
         tag.refresh_from_db()
 
         self.assertEqual(tag.user, self.user)
+
+    def test_delete_tag(self):
+        """
+        Test deleting a tag successful.
+        """
+        tag = Tag.objects.create(user=self.user)
+
+        url = detail_url(tag.id)
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Tag.objects.filter(id=tag.id).exists())
+
+    def test_delete_recipe_of_another_user(self):
+        """
+        Test deleting another user's tag gives error.
+        """
+        new_user = create_user(email='user2@example.com', password='testpass123')
+        tag = Tag.objects.create(user=new_user)
+
+        url = detail_url(tag.id)
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertTrue(Tag.objects.filter(id=tag.id).exists())
