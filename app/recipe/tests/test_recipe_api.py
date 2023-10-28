@@ -141,7 +141,7 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         recipe = Recipe.objects.get(id=response.data['id'])
-        
+
         for k, v in new_user.items():
             # Get a named attribute from an object; getattr(recipe, k) is equivalent to
             # recipe.k. In this case recipe.k must be equal to v
