@@ -99,3 +99,17 @@ class PrivateTagsAPITests(TestCase):
         tag.refresh_from_db()
         self.assertEqual(tag.name, payload['name'])
         self.assertEqual(tag.user, self.user)
+
+    def test_update_user_returns_error(self):
+        """
+        Test changing the tag user results in an error.
+        """
+        new_user = create_user(email='user2@example.com', password='testpass123')
+        tag = Tag.objects.create(user=self.user, name='Sample tag')
+
+        payload = {'user': new_user.id}
+        url = detail_url(tag.id)
+        self.client.patch(url, payload)
+        tag.refresh_from_db()
+
+        self.assertEqual(tag.user, self.user)
