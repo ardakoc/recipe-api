@@ -307,7 +307,7 @@ class PrivateRecipeAPITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn(tag_2, recipe.tags.all())
-        self.assertNotIn(tag_1, recipe.tag.all())
+        self.assertNotIn(tag_1, recipe.tags.all())
 
     def test_clear_recipe_tags(self):
         """
