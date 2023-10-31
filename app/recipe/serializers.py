@@ -68,7 +68,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             ingredient_object, created = Ingredient.objects.get_or_create(
                 user=authenticated_user, **ingredient
             )
-            recipe.ingredients.add(ingredient_object)      
+            recipe.ingredients.add(ingredient_object)
 
     def create(self, validated_data):
         """
@@ -93,7 +93,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         if ingredients is not None:
             instance.ingredients.clear()
             self._get_or_create_ingredients(ingredients, instance)
-        
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 

@@ -291,7 +291,7 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         new_tag = Tag.objects.get(user=self.user, name='Tag name')
         self.assertIn(new_tag, recipe.tags.all())
-                      
+
     def test_assign_existing_tag_on_update_recipe(self):
         """
         Test assigning an existing tag when updating a recipe.
@@ -395,7 +395,7 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         new_ingredient = Ingredient.objects.get(user=self.user, name='Ingredient name')
         self.assertIn(new_ingredient, recipe.ingredients.all())
-                      
+
     def test_assign_existing_ingredient_on_update_recipe(self):
         """
         Test assigning an existing ingredient when updating a recipe.
