@@ -88,3 +88,31 @@ class PrivateIngredientsAPITests(TestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['name'], ingredient.name)
         self.assertEqual(response.data[0]['id'], ingredient.id)
+
+    def test_update_ingredient(self):
+        """
+        Test updating a ingredient.
+        """
+        ingredient = Ingredient.objects.create(user=self.user, name='Sample ingredient name')
+        payload = {'name': 'New name'}
+        url = detail_url(ingredient.id)
+        response = self.client.patch(url, payload)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ingredient.refresh_from_db()
+        self.assertEqual(ingredient.name, payload['name'])
+        self.assertEqual(ingredient.user, self.user)
+
+    def test_update_user_returns_error(self):
+        """
+        Test changing the ingredient user results in an error.
+        """
+        new_user = create_user(email='user2@example.com', password='testpass123')
+        ingredient = Ingredient.objects.create(user=self.user, name='Sample ingredient')
+
+        payload = {'user': new_user.id}
+        url = detail_url(ingredient.id)
+        self.client.patch(url, payload)
+        ingredient.refresh_from_db()
+
+        self.assertEqual(ingredient.user, self.user)
