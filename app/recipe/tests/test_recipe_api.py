@@ -394,7 +394,7 @@ class PrivateRecipeAPITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         new_ingredient = Ingredient.objects.get(user=self.user, name='Ingredient name')
-        self.assertIn(new_ingredient, recipe.ingredient.all())
+        self.assertIn(new_ingredient, recipe.ingredients.all())
                       
     def test_assign_existing_ingredient_on_update_recipe(self):
         """
