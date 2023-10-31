@@ -39,33 +39,31 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class BaseRecipeAttrViewSet(viewsets.ModelViewSet):
+    """
+    Base viewset for manage recipe attributes.
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        Filter queryset to authenticated user.
+        """
+        return self.queryset.filter(user=self.request.user).order_by('-name')
+
+
+class TagViewSet(BaseRecipeAttrViewSet):
     """
     Viewset for manage tags apis.
     """
     queryset = Tag.objects.all()
     serializer_class = serializers.TagSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        """
-        Retrieve tags for authenticated user.
-        """
-        return self.queryset.filter(user=self.request.user).order_by('-name')
 
 
-class IngredientViewSet(viewsets.ModelViewSet):
+class IngredientViewSet(BaseRecipeAttrViewSet):
     """
     Viewset for manage ingredients apis.
     """
     queryset = Ingredient.objects.all()
     serializer_class = serializers.IngredientSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        """
-        Retrieve ingredients for authenticated user.
-        """
-        return self.queryset.filter(user=self.request.user).order_by('-name')
