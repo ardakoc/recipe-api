@@ -17,7 +17,7 @@ INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
 def detail_url(ingredient_id):
     """
-    Create and return a ingredient detail url.
+    Create and return an ingredient detail url.
     """
     return reverse('recipe:ingredient-detail', args=[ingredient_id])
 
@@ -91,9 +91,12 @@ class PrivateIngredientsAPITests(TestCase):
 
     def test_update_ingredient(self):
         """
-        Test updating a ingredient.
+        Test updating an ingredient.
         """
-        ingredient = Ingredient.objects.create(user=self.user, name='Sample ingredient name')
+        ingredient = Ingredient.objects.create(
+            user=self.user,
+            name='Sample ingredient name'
+        )
         payload = {'name': 'New name'}
         url = detail_url(ingredient.id)
         response = self.client.patch(url, payload)
@@ -108,7 +111,10 @@ class PrivateIngredientsAPITests(TestCase):
         Test changing the ingredient user results in an error.
         """
         new_user = create_user(email='user2@example.com', password='testpass123')
-        ingredient = Ingredient.objects.create(user=self.user, name='Sample ingredient')
+        ingredient = Ingredient.objects.create(
+            user=self.user,
+            name='Sample ingredient'
+        )
 
         payload = {'user': new_user.id}
         url = detail_url(ingredient.id)
@@ -116,3 +122,28 @@ class PrivateIngredientsAPITests(TestCase):
         ingredient.refresh_from_db()
 
         self.assertEqual(ingredient.user, self.user)
+
+    def test_delete_ingredient(self):
+        """
+        Test deleting an ingredient successful.
+        """
+        ingredient = Ingredient.objects.create(user=self.user)
+
+        url = detail_url(ingredient.id)
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Ingredient.objects.filter(id=ingredient.id).exists())
+
+    def test_delete_recipe_of_another_user(self):
+        """
+        Test deleting another user's ingredient gives error.
+        """
+        new_user = create_user(email='user2@example.com', password='testpass123')
+        ingredient = Ingredient.objects.create(user=new_user)
+
+        url = detail_url(ingredient.id)
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertTrue(Ingredient.objects.filter(id=ingredient.id).exists())
