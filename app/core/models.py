@@ -1,6 +1,9 @@
 """
 Database models.
 """
+import uuid
+import os
+
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -8,6 +11,21 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 from django.conf import settings
+
+
+def recipe_image_file_path(instance, filename):
+    """
+    Generate file path for new recipe image.
+    """
+    # Extracting the extension(.jpg/.png) of the file name:
+    extension = os.path.splitext(filename)[1]
+    # Creating our own file name by creating UUID, and appending the extracted
+    # extension to the end:
+    filename = f'{uuid.uuid4()}{extension}'
+    # By using the os.path.join method, we consider path spelling differences in
+    # operating systems (e.g. in Windows it'll be uploads\recipe\{filename}, and in
+    # Linux it'll be uploads/recipe/{filename}):
+    return os.path.join('uploads', 'recipe', filename)
 
 
 class UserManager(BaseUserManager):
@@ -63,6 +81,7 @@ class Recipe(models.Model):
     link = models.CharField(max_length=1023, blank=True)
     tags = models.ManyToManyField(to='Tag')
     ingredients = models.ManyToManyField(to='Ingredient')
+    image = models.ImageField(null=True, upload_to=recipe_image_file_path)
 
     def __str__(self):
         return self.title
