@@ -100,7 +100,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             OpenApiParameter(
                 'assigned_only',
                 OpenApiTypes.INT, enum=[0, 1],
-                description='Filter by items assigned to recipes',
+                description='Filter by items assigned to recipes (0=False, 1=True)',
             ),
         ]
     )
