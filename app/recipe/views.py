@@ -94,6 +94,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                'assigned_only',
+                OpenApiTypes.INT, enum=[0, 1],
+                description='Filter by items assigned to recipes',
+            ),
+        ]
+    )
+)
 class BaseRecipeAttrViewSet(viewsets.ModelViewSet):
     """
     Base viewset for manage recipe attributes.
